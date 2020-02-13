@@ -98,6 +98,13 @@ class sspmod_authtfaga_Auth_Source_authtfaga extends SimpleSAML_Auth_Source
 		SimpleSAML\Utils\HTTP::redirectTrustedURL($url, array('AuthState' => $id));
     }
 
+    public function logout(&$returnTo) {
+        $as = SimpleSAML_Configuration::getConfig('authsources.php')->getValue($this->authId);
+        $authSource = new \SimpleSAML\Auth\Simple($as['mainAuthSource']);
+        $authSource->logout($returnTo);
+        \SimpleSAML\Session::getSessionFromRequest()->cleanup();
+    }
+
     private function createTables()
     {
         $q = 'CREATE TABLE IF NOT EXISTS sspga_gakeys (
